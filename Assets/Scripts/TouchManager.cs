@@ -15,12 +15,18 @@ public class TouchManager : MonoBehaviour
     private ARRaycastManager arRaycast;
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
+    private RaycastHit objectHit;
+
+    private GameObject selectedObject;
+
+
     [SerializeField]
     private GameObject prefab;
+    
 
     private TouchManager instance;
 
-    private static bool uiWasUsedThisFrame;
+    private bool uiWasUsedThisFrame;
 
     private static string selectedCommand = "ADD";
 
@@ -77,6 +83,13 @@ public class TouchManager : MonoBehaviour
 
     }
 
+    public void setSelectedCommand(string value)
+    {
+
+        selectedCommand = value;
+
+    }
+
     private void AddObject(Vector2 position)
     {
 
@@ -90,6 +103,76 @@ public class TouchManager : MonoBehaviour
 
     }
 
+    private void RemoveObject(Vector2 position)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(position);
+
+        if (Physics.Raycast(ray, out objectHit))
+        {
+
+            GameObject hitedObject = objectHit.collider.gameObject;
+
+            if (hitedObject.tag != "Object")
+            {
+
+                return;
+
+            }
+
+            Destroy(hitedObject);
+
+        }
+
+    }
+
+    private void SelectObject(Vector2 position)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(position);
+
+        if (Physics.Raycast(ray, out objectHit))
+        {
+
+            GameObject hitedObject = objectHit.collider.gameObject;
+
+            if(hitedObject.tag != "Object")
+            {
+
+                if(selectedObject)
+                {
+
+                    ObjectController oldObjectController = selectedObject.GetComponent<ObjectController>();
+
+                    oldObjectController.SetOutline();
+
+                    selectedObject = null;
+
+                }
+
+                return;
+
+            }
+            
+
+            if(hitedObject != selectedObject && selectedObject)
+            {
+                ObjectController oldObjectController = selectedObject.GetComponent<ObjectController>();
+
+                oldObjectController.SetOutline();
+
+            }
+
+            ObjectController objectController = hitedObject.GetComponent<ObjectController>();
+
+            objectController.SetOutline();
+
+            selectedObject = hitedObject;
+
+
+        }
+
+    }
+
+
     public IEnumerator WaitFrame(InputAction.CallbackContext context)
     {
 
@@ -98,11 +181,29 @@ public class TouchManager : MonoBehaviour
         if (!uiWasUsedThisFrame)
         {
 
-            AddObject(context.ReadValue<Vector2>());
+            if(selectedCommand == "ADD")
+            {
+
+                AddObject(context.ReadValue<Vector2>());
+
+            }
+
+            if (selectedCommand == "REMOVE")
+            {
+
+                RemoveObject(context.ReadValue<Vector2>());
+
+            }
+
+            if (selectedCommand == "SELECT")
+            {
+
+                SelectObject(context.ReadValue<Vector2>());
+
+            }
 
         }
 
-        Debug.Log(context.ReadValue<Vector2>());
         
         uiWasUsedThisFrame = false;
         

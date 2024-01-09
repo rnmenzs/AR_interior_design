@@ -8,14 +8,14 @@ using UnityEngine.UI;
 public class UiController : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
 
-    private TouchManager gameManager;
+    private TouchManager touchManager;
 
     private bool isClicked = false;
 
     private void Awake()
     {
 
-        gameManager = GameObject.FindObjectOfType<TouchManager>();
+        touchManager = GameObject.FindObjectOfType<TouchManager>();
 
     }
 
@@ -25,7 +25,7 @@ public class UiController : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         if (isClicked)
         {
 
-            gameManager.setUiWasUsedThisFrame(true);
+            touchManager.setUiWasUsedThisFrame(true);
 
             return;
 
