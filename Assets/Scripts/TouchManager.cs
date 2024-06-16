@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.UIElements;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.InputSystem.HID;
+using System;
+using UnityEngine.InputSystem.Controls;
 
 public class TouchManager : MonoBehaviour
 {
@@ -13,16 +16,48 @@ public class TouchManager : MonoBehaviour
     private PlayerInput playerInput;
     private InputAction touch;
     private ARRaycastManager arRaycast;
+
+    private ARPlaneManager aRPlaneManager;
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
+
+    [SerializeField]
+    private List<FurnitureSO> furnitures;
+
+    public List<FurnitureSO> Furnitures
+    {
+        get
+        {
+
+            return furnitures;
+
+        }
+
+    }
 
     private RaycastHit objectHit;
 
-    private GameObject selectedObject;
+    private GameObject selectedObject = null;
 
 
     [SerializeField]
-    private GameObject prefab;
-    
+    private FurnitureSO placeableObjectFurniture;
+
+    public FurnitureSO PlaceableObjectFurniture
+    {
+        get { 
+            
+            return placeableObjectFurniture;
+
+        }
+
+        set
+        {
+
+            placeableObjectFurniture = value;
+
+        }
+
+    }
 
     private TouchManager instance;
 
@@ -36,6 +71,8 @@ public class TouchManager : MonoBehaviour
         uiWasUsedThisFrame = false;
 
         arRaycast = GetComponent<ARRaycastManager>();
+
+        aRPlaneManager = GetComponent<ARPlaneManager>();
 
         if (instance == null)
         {
@@ -93,35 +130,52 @@ public class TouchManager : MonoBehaviour
     private void AddObject(Vector2 position)
     {
 
-        if(arRaycast.Raycast(position, hits, TrackableType.PlaneWithinPolygon)) {
+        Camera mainCam = Camera.main;
 
+        Transform camTransform = mainCam.transform;
+
+        if(arRaycast.Raycast(position, hits, TrackableType.PlaneWithinPolygon)) {
+            
             Pose pose = hits[0].pose;
 
-            Instantiate(prefab, pose.position, pose.rotation);
+            if (aRPlaneManager.GetPlane(hits[0].trackableId).alignment == PlaneAlignment.HorizontalUp && placeableObjectFurniture.orientation == TypeOrientation.Horizontal)
+            {
+                Vector3 cameraPos = camTransform.position;
+                cameraPos.y = 0f;
+                Vector3 objPos = pose.position;
+                objPos.y = 0f;
+
+                Vector3 direction = cameraPos - objPos;
+                Quaternion rotation = Quaternion.LookRotation(direction);
+
+                if (placeableObjectFurniture.name.Contains("chairM2"))
+                {
+                    Debug.Log(rotation.y);
+                    objPos.y += 0.1f;
+                }
+
+                Instantiate(PlaceableObjectFurniture.furniture, objPos, rotation);
+
+            }
+            
+            if (aRPlaneManager.GetPlane(hits[0].trackableId).alignment == PlaneAlignment.Vertical && placeableObjectFurniture.orientation == TypeOrientation.Vertical)
+            {
+
+                Instantiate(PlaceableObjectFurniture.furniture, pose.position, pose.rotation);
+
+            }
+
 
         }
 
     }
 
-    private void RemoveObject(Vector2 position)
+    private void RemoveObject()
     {
-        Ray ray = Camera.main.ScreenPointToRay(position);
 
-        if (Physics.Raycast(ray, out objectHit))
-        {
+        Destroy(selectedObject);
 
-            GameObject hitedObject = objectHit.collider.gameObject;
-
-            if (hitedObject.tag != "Object")
-            {
-
-                return;
-
-            }
-
-            Destroy(hitedObject);
-
-        }
+        Debug.Log(selectedObject);
 
     }
 
@@ -134,7 +188,7 @@ public class TouchManager : MonoBehaviour
 
             GameObject hitedObject = objectHit.collider.gameObject;
 
-            if(hitedObject.tag != "Object")
+            if(!hitedObject.CompareTag("Object"))
             {
 
                 if(selectedObject)
@@ -167,52 +221,53 @@ public class TouchManager : MonoBehaviour
 
             selectedObject = hitedObject;
 
-
         }
 
     }
 
 
     public IEnumerator WaitFrame(InputAction.CallbackContext context)
-    {
+    { 
 
-        yield return new WaitForSeconds(0.1f);
-
-        if (!uiWasUsedThisFrame)
+        if (selectedCommand == "REMOVE" && selectedObject)
         {
 
-            if(selectedCommand == "ADD")
+            RemoveObject();
+
+            selectedCommand = "SELECT";
+
+        }
+
+
+        if(selectedCommand != "MOVE") { 
+        
+            yield return new WaitForSeconds(0.01f);
+
+            if (!uiWasUsedThisFrame)
             {
 
-                AddObject(context.ReadValue<Vector2>());
+                if(selectedCommand == "ADD")
+                {
 
-            }
+                    AddObject(context.ReadValue<Vector2>());
 
-            if (selectedCommand == "REMOVE")
-            {
+                }
 
-                RemoveObject(context.ReadValue<Vector2>());
+                if (selectedCommand == "SELECT")
+                {
 
-            }
+                    SelectObject(context.ReadValue<Vector2>());
 
-            if (selectedCommand == "SELECT")
-            {
-
-                SelectObject(context.ReadValue<Vector2>());
+                }
 
             }
 
         }
-
         
         uiWasUsedThisFrame = false;
-        
-        StopCoroutine("WaitFrame");
 
+        StopCoroutine(nameof(WaitFrame));
 
     }
-
-
-
 
 }

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aca5b2fe1e2b67488730f0c8e4f6a7e, type: 3}
+  m_Name: paint1
+  m_EditorClassIdentifier: 
+  furnitureName: Quadro
+  furnitureIcon: {fileID: 21300000, guid: 14683f108cc733640913e16f97e9c858, type: 3}
+  furniture: {fileID: 1627497564551428, guid: 9e93a77e2fb1c2340851a5ef85b18047, type: 3}
+  orientation: 1

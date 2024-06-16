@@ -24,14 +24,14 @@ public partial class @Controller: IInputActionCollection2, IDisposable
     ""name"": ""Controller"",
     ""maps"": [
         {
-            ""name"": ""actionsController"",
+            ""name"": ""touchController"",
             ""id"": ""b145f46b-288e-4609-b1d4-b2d5a4b441fd"",
             ""actions"": [
                 {
                     ""name"": ""Touch"",
                     ""type"": ""Value"",
                     ""id"": ""bc06aece-1aba-4398-aea0-eceabd96784c"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -41,7 +41,7 @@ public partial class @Controller: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""0d4e2bb6-440c-44d7-81a5-33b67c74eddb"",
-                    ""path"": ""<Touchscreen>/position"",
+                    ""path"": ""<Touchscreen>/primaryTouch/startPosition"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -54,9 +54,9 @@ public partial class @Controller: IInputActionCollection2, IDisposable
     ],
     ""controlSchemes"": []
 }");
-        // actionsController
-        m_actionsController = asset.FindActionMap("actionsController", throwIfNotFound: true);
-        m_actionsController_Touch = m_actionsController.FindAction("Touch", throwIfNotFound: true);
+        // touchController
+        m_touchController = asset.FindActionMap("touchController", throwIfNotFound: true);
+        m_touchController_Touch = m_touchController.FindAction("Touch", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -115,52 +115,52 @@ public partial class @Controller: IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // actionsController
-    private readonly InputActionMap m_actionsController;
-    private List<IActionsControllerActions> m_ActionsControllerActionsCallbackInterfaces = new List<IActionsControllerActions>();
-    private readonly InputAction m_actionsController_Touch;
-    public struct ActionsControllerActions
+    // touchController
+    private readonly InputActionMap m_touchController;
+    private List<ITouchControllerActions> m_TouchControllerActionsCallbackInterfaces = new List<ITouchControllerActions>();
+    private readonly InputAction m_touchController_Touch;
+    public struct TouchControllerActions
     {
         private @Controller m_Wrapper;
-        public ActionsControllerActions(@Controller wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Touch => m_Wrapper.m_actionsController_Touch;
-        public InputActionMap Get() { return m_Wrapper.m_actionsController; }
+        public TouchControllerActions(@Controller wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Touch => m_Wrapper.m_touchController_Touch;
+        public InputActionMap Get() { return m_Wrapper.m_touchController; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(ActionsControllerActions set) { return set.Get(); }
-        public void AddCallbacks(IActionsControllerActions instance)
+        public static implicit operator InputActionMap(TouchControllerActions set) { return set.Get(); }
+        public void AddCallbacks(ITouchControllerActions instance)
         {
-            if (instance == null || m_Wrapper.m_ActionsControllerActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_ActionsControllerActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_TouchControllerActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_TouchControllerActionsCallbackInterfaces.Add(instance);
             @Touch.started += instance.OnTouch;
             @Touch.performed += instance.OnTouch;
             @Touch.canceled += instance.OnTouch;
         }
 
-        private void UnregisterCallbacks(IActionsControllerActions instance)
+        private void UnregisterCallbacks(ITouchControllerActions instance)
         {
             @Touch.started -= instance.OnTouch;
             @Touch.performed -= instance.OnTouch;
             @Touch.canceled -= instance.OnTouch;
         }
 
-        public void RemoveCallbacks(IActionsControllerActions instance)
+        public void RemoveCallbacks(ITouchControllerActions instance)
         {
-            if (m_Wrapper.m_ActionsControllerActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_TouchControllerActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(IActionsControllerActions instance)
+        public void SetCallbacks(ITouchControllerActions instance)
         {
-            foreach (var item in m_Wrapper.m_ActionsControllerActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_TouchControllerActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_ActionsControllerActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_TouchControllerActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public ActionsControllerActions @actionsController => new ActionsControllerActions(this);
-    public interface IActionsControllerActions
+    public TouchControllerActions @touchController => new TouchControllerActions(this);
+    public interface ITouchControllerActions
     {
         void OnTouch(InputAction.CallbackContext context);
     }

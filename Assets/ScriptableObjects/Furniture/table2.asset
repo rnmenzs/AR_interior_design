@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aca5b2fe1e2b67488730f0c8e4f6a7e, type: 3}
+  m_Name: table2
+  m_EditorClassIdentifier: 
+  furnitureName: Mesa
+  furnitureIcon: {fileID: 21300000, guid: b50fefb5fe7964144b473a9b954ec147, type: 3}
+  furniture: {fileID: 7384884230914764799, guid: 0118e957e59152e41a773823faf0d93d, type: 3}
+  orientation: 0
