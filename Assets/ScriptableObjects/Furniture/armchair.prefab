@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5423948067845854676}
   - component: {fileID: -1324536608934215618}
   - component: {fileID: -5109656654136185592}
+  - component: {fileID: 1235603997339972903}
   m_Layer: 0
   m_Name: armchair
   m_TagString: Object
@@ -29,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4943547308931080054}
@@ -99,6 +100,27 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!65 &1235603997339972903
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456115914855725087}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1252136, y: 0.9269409, z: 1.4598999}
+  m_Center: {x: 0.06260681, y: 0.52597046, z: 0.03591919}
 --- !u!1 &4948933801387490247
 GameObject:
   m_ObjectHideFlags: 0

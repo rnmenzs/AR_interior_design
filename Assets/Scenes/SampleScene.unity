@@ -382,7 +382,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f1a110d32af21aa4d872c707dfcc6043, type: 2}
+  - {fileID: 2100000, guid: d3183610e555ea0409852d53174e4425, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -446,7 +446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d180956a54db4646a1c6342921672ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TrackingStateVisibilityThreshold: 1
+  m_TrackingStateVisibilityThreshold: 2
   m_HideSubsumed: 1
 --- !u!114 &433750077
 MonoBehaviour:
@@ -941,7 +941,7 @@ MonoBehaviour:
   m_OriginBaseGameObject: {fileID: 1549814554}
   m_CameraFloorOffsetObject: {fileID: 2116174517}
   m_RequestedTrackingOriginMode: 1
-  m_CameraYOffset: 1.1176
+  m_CameraYOffset: 0
 --- !u!4 &1549814558
 Transform:
   m_ObjectHideFlags: 0

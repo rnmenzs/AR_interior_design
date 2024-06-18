@@ -138,21 +138,18 @@ public class TouchManager : MonoBehaviour
             
             Pose pose = hits[0].pose;
 
+            Vector3 cameraPos = camTransform.position;
+            cameraPos.y = 0f;
+            Vector3 objPos = pose.position;
+            objPos.y = 0f;
+
+            Vector3 direction = cameraPos - objPos;
+            Quaternion rotation = Quaternion.LookRotation(direction);
+
             if (aRPlaneManager.GetPlane(hits[0].trackableId).alignment == PlaneAlignment.HorizontalUp && placeableObjectFurniture.orientation == TypeOrientation.Horizontal)
             {
-                Vector3 cameraPos = camTransform.position;
-                cameraPos.y = 0f;
-                Vector3 objPos = pose.position;
-                objPos.y = 0f;
 
-                Vector3 direction = cameraPos - objPos;
-                Quaternion rotation = Quaternion.LookRotation(direction);
-
-                if (placeableObjectFurniture.name.Contains("chairM2"))
-                {
-                    Debug.Log(rotation.y);
-                    objPos.y += 0.1f;
-                }
+                objPos.y -= 1f;
 
                 Instantiate(PlaceableObjectFurniture.furniture, objPos, rotation);
 
@@ -162,6 +159,7 @@ public class TouchManager : MonoBehaviour
             {
 
                 Instantiate(PlaceableObjectFurniture.furniture, pose.position, pose.rotation);
+
 
             }
 
